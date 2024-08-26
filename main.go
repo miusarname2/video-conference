@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -70,8 +71,16 @@ func main() {
 
 	go handleMessages()
 
-	fmt.Println("Server started on :3000")
-	err := http.ListenAndServe(":3000", nil)
+	// HTTPS server setup
+	server := &http.Server{
+		Addr: ":8443",
+		TLSConfig: &tls.Config{
+			MinVersion: tls.VersionTLS13,
+		},
+	}
+
+	fmt.Println("Server started on https://localhost:8443")
+	err := server.ListenAndServeTLS("cert.pem", "key.pem")
 	if err != nil {
 		fmt.Println("Error starting server: ", err)
 	}

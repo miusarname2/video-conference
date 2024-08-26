@@ -9,7 +9,8 @@ navigator.mediaDevices.getUserMedia({
 }).then(stream => {
     addVideoStream(myVideo, stream);
 
-    const ws = new WebSocket('ws://' + window.location.host + '/ws');
+    // Use WSS for secure WebSocket connection
+    const ws = new WebSocket('wss://' + window.location.host + '/ws');
     ws.onmessage = ({ data }) => {
         const message = JSON.parse(data);
 
